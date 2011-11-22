@@ -1,0 +1,16 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citename{Brants and Franz}2006]{GoogleNgrams}
+Thorsten Brants and Alex Franz.
+\newblock 2006.
+\newblock Web 1{T} 5-gram version 1.
+
+\bibitem[\protect\citename{Lin \bgroup et al.\egroup }2010]{LinEtAlLREC10}
+Dekang Lin, Kenneth Church, Heng Ji, Satoshi Sekine, David Yarowsky, Shane
+  Bergsma, Kailash Patil, Emily Pitler, Rachel Lathbury, Vikram Rao, Kapil
+  Dalwani, and Sushant Narsale.
+\newblock 2010.
+\newblock New tools for web-scale n-grams.
+\newblock In {\em Proceedings of LREC}.
+
+\end{thebibliography}
