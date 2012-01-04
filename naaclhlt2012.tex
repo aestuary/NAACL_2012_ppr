@@ -331,21 +331,27 @@ We have evaluated the effects of domain bias for various aspects of paraphrasing
 %% === from DomainAdaptationDescription.doc
 %% In-domain corpus and fixed vocabulary for LM training
 
-{\em Language Models Training Data} The majority of our evaluation is based on a target domain defined by biology-related context. We built our target domain language model by combining a biology textbook and the GENIA database \cite{jdkim:2003}, which are of similar sizes. The GENIA database is a collection of 1.999 biomedical publication abstracts, whereas the biology textbook is text material intended for generic introductory courses in biology.
-
-Another domain of text used for domain biasing is parliamentary, which was extracted from proceedings of the European parliament with a total of about 97 million words in the English-translation text. For the results from different language models to be comparable, the language models training data must be similar in sizes. 
-%Out of the (size) tokens in this collection, disjoint sets in the sizes of 
+%{\em Language Models Training Data} 
+The majority of our evaluation is based on a target domain defined by {\em biology}-related context. We built our target domain language model using a combination of a biology textbook and the GENIA database \cite{jdkim:2003}, which are of similar sizes. The GENIA database is a collection of 1.999 biomedical publication abstracts, whereas the biology textbook is text material intended for generic introductory courses in biology.
 
 %% === 
-GigaFrEn, a French-English parallel corpus verging on 1 billion words \cite{callisonburch-EtAl:2009:WMT} was used as the general corpus from which the domain-specific corpus is built. It was constructed by conducting a large-scale web crawl targeting bilingual web sites. It captures a wide variety of topics\footnote{These sites came from a variety of sources including the Canadian government, the European Union, the United Nations, Amnesty International, the World Health Organization, and other international organizations. The crawl yielded on the order of 40 million files, consisting of more than 1TB of data. It represents the largest and most diverse parallel corpus available for research purposes.}, and is therefore perfectly suited for domain-adaptation studies for bilingually derived paraphrases.
+The general-domain corpus comprises of the European parliament (Europarl) and Giga-French-English (GigaFrEn) corpus, which are both French-English parallel corpora and sum up to roughly 0.6 billion words on the English side. Europarl is extracted from the proceedings of the European parliament with a total of about 97 million words in the English text, while GigaFrEn was constructed by conducting a large-scale web crawl targeting bilingual web sites, and it's verging on 1 billion words \cite{callisonburch-EtAl:2009:WMT}. It captures a wide variety of topics\footnote{These sites came from a variety of sources including the Canadian government, the European Union, the United Nations, Amnesty International, the World Health Organization, and other international organizations. The crawl yielded on the order of 40 million files, consisting of more than 1TB of data. It represents the largest and most diverse parallel corpus available for research purposes.}, and is therefore perfectly suited for domain-adaptation studies for bilingually derived paraphrases.
 
-The non-domain-specific data consists of the Giga-French-English  and the Europarl French-English corpora, which sum up to roughly 0.6 billion words on the English side. The language models for cross entropy calculations were trained separately on data set of similar sizes to allow for comparable results. 
+The English side of the large parallel corpus is subsampled to train a {\em general-domain} language model. For the results from different language models to be comparable, the size of the subsampled data matches that of the biology language model.
+
+%The non-domain-specific data consists of the Giga-French-English  and the Europarl French-English corpora,  The language models for cross entropy calculations were trained separately on data set of similar sizes to allow for comparable results. 
  %% ===
+
+To assess the effects of distinct target domains on domain-specific paraphrasing, {\em parliamentary} text was used to construct an additional target domain. Similar to general-domain language model, the English side of Europarl corpus was subsampled to match the size of that for biology domain for language model training.
+%Out of the (size) tokens in this collection, disjoint sets in the sizes of 
  
 {\em Language Model Vocabulary} A list of fixed vocabulary extracted from the unigrams in the in-domain training data and the textbook index, were used to train both of the language models. Preprocessing on the training data was performed in order to eliminate lines with non-sentence like structure or with too many special or repeated characters. Unigrams from the biology textbook was required to have repeated occurrences in order to be included in the vocabulary list.
 
+%{\em Preprocessing}@@ tokenization, normalization, cleaning, all preprocessing (see fileInfo.txt notes and refer to first paragraphs of Moore's section 3)
+Data from different corpora were all tokenized and lowercased. Moreover, the general-domain data was preprocessed to remove lines with any of the symbolsL {=, +, $\setminus$, \%, \#, :}, with mainly repeated words or were too short, while dashes for scientific compound words, figure captions and labels in biology text corpus were removed.
 
-{\em Preprocessing}@@ tokenization, normalization, cleaning, all preprocessing (see fileInfo.txt notes and refer to first paragraphs of Moore's section 3)
+@@ table of line/token counts for LM training? @@
+The input
 
 @@ srilm model params
 @@ thresholding in BiP and MonoDS scores
