@@ -322,7 +322,7 @@ The similarity score based on monolingual distributional similarity (MonoDS) was
 \section{Experimental Setup}
 \label{sect:exptSetup}
 
-In this section, the details of the experimental setup are presented with respect to the diagram in Figure \ref{pipeline_diagram}. 
+We have evaluated the effects of domain bias for various aspects of paraphrasing such as coverage, perplexity on test data, and empirical examples. The details of the experimental setup covered in the rest of this section are described with reference to the diagram in Figure \ref{pipeline_diagram}. 
 
 \subsection{Data and Language Models}
 \label{sect:data_LMs}
@@ -330,22 +330,24 @@ In this section, the details of the experimental setup are presented with respec
 %@@ data: in-domain, out-domain
 %% === from DomainAdaptationDescription.doc
 %% In-domain corpus and fixed vocabulary for LM training
-We defined our target domain through combining the biology textbook and the GENIA database \cite{jdkim:2003} of similar sizes. The GENIA database is a collection of 1.999 biomedical publication abstracts, whereas the biology textbook is intended for generic introductory courses in biology.
 
+{\em Language Models Training Data} The majority of our evaluation is based on a target domain defined by biology-related context. We built our target domain language model by combining a biology textbook and the GENIA database \cite{jdkim:2003}, which are of similar sizes. The GENIA database is a collection of 1.999 biomedical publication abstracts, whereas the biology textbook is text material intended for generic introductory courses in biology.
+
+Another domain of text used for domain biasing is parliamentary, which was extracted from proceedings of the European parliament with a total of about 97 million words in the English-translation text. For the results from different language models to be comparable, the language models training data must be similar in sizes. 
 %Out of the (size) tokens in this collection, disjoint sets in the sizes of 
-
-A list of fixed vocabulary extracted from the unigrams in the in-domain training data and the textbook index, were used to train both of the language models. Preprocessing on the training data was performed in order to eliminate lines with non-sentence like structure or with too many special or repeated characters. Unigrams from the biology textbook was required to have repeated occurrences in order to be included in the vocabulary list.
 
 %% === 
 GigaFrEn, a French-English parallel corpus verging on 1 billion words \cite{callisonburch-EtAl:2009:WMT} was used as the general corpus from which the domain-specific corpus is built. It was constructed by conducting a large-scale web crawl targeting bilingual web sites. It captures a wide variety of topics\footnote{These sites came from a variety of sources including the Canadian government, the European Union, the United Nations, Amnesty International, the World Health Organization, and other international organizations. The crawl yielded on the order of 40 million files, consisting of more than 1TB of data. It represents the largest and most diverse parallel corpus available for research purposes.}, and is therefore perfectly suited for domain-adaptation studies for bilingually derived paraphrases.
+
+The non-domain-specific data consists of the Giga-French-English  and the Europarl French-English corpora, which sum up to roughly 0.6 billion words on the English side. The language models for cross entropy calculations were trained separately on data set of similar sizes to allow for comparable results. 
  %% ===
  
-The non-domain-specific data consists of the Giga-French-English  and the Europarl French-English corpora, which sum up to roughly 0.6 billion words on the English side. The language models for cross entropy calculations were trained separately on data set of similar sizes to allow for comparable results. 
+{\em Language Model Vocabulary} A list of fixed vocabulary extracted from the unigrams in the in-domain training data and the textbook index, were used to train both of the language models. Preprocessing on the training data was performed in order to eliminate lines with non-sentence like structure or with too many special or repeated characters. Unigrams from the biology textbook was required to have repeated occurrences in order to be included in the vocabulary list.
 
+
+{\em Preprocessing}@@ tokenization, normalization, cleaning, all preprocessing (see fileInfo.txt notes and refer to first paragraphs of Moore's section 3)
 
 @@ srilm model params
-@@ tokenization, normalization, cleaning, all preprocessing (see fileInfo.txt notes and refer to first paragraphs of Moore's section 3)
-@@ mention only comparison between diffCE and random subsampling are done for size ~ Europarl because of engineering/computational limitation after many attempts. But this is also precisely what we emphasize in the paper: under finite resources and time, 
 @@ thresholding in BiP and MonoDS scores
 @@ averaging in analysis: mean sent, median turker
 @@ emphasize what's used as "in-domain test set" and will be used repeatedly for quantitative evaluation in subsequent sections
@@ -450,7 +452,8 @@ Although domain-biased subsampling is expected to outperform random sampling, th
 \label{tbl_subsampStats}
 \end{table}
 
-Due to computational constraints, research in MT typically employs simple subsampling methods in order to reduce the amount of data for actual processing. For example, a standard subsampling method based on n-gram overlap with a reference text for sentence selection is provided by Joshua \cite{Joshua-Decoder}, an open source decoder for statistical MT. In order to compare this subsampling method with that based on difference in cross entropy, the corpus of similar size to the Joshua subsampling was extracted based on diffCE. Table \ref{tbl_subsampStats} tabulates the corpora sizes and the perplexity for in-domain text data. The smaller perplexity produced by diffCE-based method validates cross entropy from two contrasting domains is more informative than basic n-gram overlap methods.
+Due to computational constraints, research in MT typically employs simple subsampling methods in order to reduce the amount of data for actual processing. For example, a standard subsampling method based on n-gram overlap with a reference text for sentence selection is provided by Joshua \cite{Joshua-Decoder}, an open source decoder for statistical MT. In order to compare this subsampling method with that based on difference in cross entropy, the corpus of similar size to the Joshua subsampling was extracted based on diffCE. Table \ref{tbl_subsampStats} tabulates the corpora sizes and the perplexity for in-domain text data. The smaller perplexity produced by diffCE-based method validates cross entropy from two contrasting domains is more informative than basic n-gram overlap methods. This result also implies that, if computational resources is a constraint, the diffCE-based method would likely to deliver better performance for the same size of subsampling.
+
 
 % ====================================%
 
