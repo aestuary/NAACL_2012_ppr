@@ -326,14 +326,8 @@ In this section, the details of the experimental setup are presented with respec
 
 \subsection{Data and Language Models}
 \label{sect:data_LMs}
-@@ data: in-domain, out-domain
-@@ srilm model params
-@@ tokenization, normalization, cleaning, all preprocessing (see fileInfo.txt notes and refer to first paragraphs of Moore's section 3)
-@@ mention only comparison between diffCE and random subsampling are done for size ~ Europarl because of engineering/computational limitation after many attempts. But this is also precisely what we emphasize in the paper: under finite resources and time, 
-@@ thresholding in BiP and MonoDS scores
-@@ averaging in analysis: mean sent, median turker
-@@ emphasize what's used as "in-domain test set" and will be used repeatedly for quantitative evaluation in subsequent sections
 
+%@@ data: in-domain, out-domain
 %% === from DomainAdaptationDescription.doc
 %% In-domain corpus and fixed vocabulary for LM training
 We defined our target domain through combining the biology textbook and the GENIA database \cite{jdkim:2003} of similar sizes. The GENIA database is a collection of 1.999 biomedical publication abstracts, whereas the biology textbook is intended for generic introductory courses in biology.
@@ -342,13 +336,20 @@ We defined our target domain through combining the biology textbook and the GENI
 
 A list of fixed vocabulary extracted from the unigrams in the in-domain training data and the textbook index, were used to train both of the language models. Preprocessing on the training data was performed in order to eliminate lines with non-sentence like structure or with too many special or repeated characters. Unigrams from the biology textbook was required to have repeated occurrences in order to be included in the vocabulary list.
 
-
 %% === 
 GigaFrEn, a French-English parallel corpus verging on 1 billion words \cite{callisonburch-EtAl:2009:WMT} was used as the general corpus from which the domain-specific corpus is built. It was constructed by conducting a large-scale web crawl targeting bilingual web sites. It captures a wide variety of topics\footnote{These sites came from a variety of sources including the Canadian government, the European Union, the United Nations, Amnesty International, the World Health Organization, and other international organizations. The crawl yielded on the order of 40 million files, consisting of more than 1TB of data. It represents the largest and most diverse parallel corpus available for research purposes.}, and is therefore perfectly suited for domain-adaptation studies for bilingually derived paraphrases.
-
  %% ===
  
 The non-domain-specific data consists of the Giga-French-English  and the Europarl French-English corpora, which sum up to roughly 0.6 billion words on the English side. The language models for cross entropy calculations were trained separately on data set of similar sizes to allow for comparable results. 
+
+
+@@ srilm model params
+@@ tokenization, normalization, cleaning, all preprocessing (see fileInfo.txt notes and refer to first paragraphs of Moore's section 3)
+@@ mention only comparison between diffCE and random subsampling are done for size ~ Europarl because of engineering/computational limitation after many attempts. But this is also precisely what we emphasize in the paper: under finite resources and time, 
+@@ thresholding in BiP and MonoDS scores
+@@ averaging in analysis: mean sent, median turker
+@@ emphasize what's used as "in-domain test set" and will be used repeatedly for quantitative evaluation in subsequent sections
+
 
 \subsection{Language Model Training for In-Domain Text}
 \label{sect:LM_PPL}

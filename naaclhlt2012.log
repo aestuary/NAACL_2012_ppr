@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.11 (TeX Live 2010) (format=pdflatex 2010.7.21)  4 JAN 2012 15:50
+This is pdfTeX, Version 3.1415926-1.40.11 (TeX Live 2010) (format=pdflatex 2010.7.21)  4 JAN 2012 15:55
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -202,31 +202,41 @@ File: DomainAdaptationDiagram_BnW.pdf Graphic file (type pdf)
 
 <use DomainAdaptationDiagram_BnW.pdf> [4]
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9> on input line 348.
+(Font)              <9> on input line 341.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 348.
+(Font)              <5> on input line 341.
 
-Underfull \hbox (badness 1558) in paragraph at lines 352--353
+Underfull \hbox (badness 1558) in paragraph at lines 344--345
 []\OT1/ptm/m/n/10.95 The non-domain-specific data con-sists of the
  []
 
 
-Underfull \hbox (badness 4144) in paragraph at lines 352--353
+Underfull \hbox (badness 4144) in paragraph at lines 344--345
 \OT1/ptm/m/n/10.95 Giga-French-English and the Eu-roparl French-
  []
 
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 416.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 418.
 
-Underfull \vbox (badness 3746) has occurred while \output is active []
+Underfull \hbox (badness 2503) in paragraph at lines 347--353
+\OT1/ptm/m/n/10.95 Info.txt notes and re-fer to first para-graphs of
+ []
+
+
+Underfull \hbox (badness 1365) in paragraph at lines 347--353
+\OT1/ptm/m/n/10.95 done for size   Eu-roparl be-cause of en-gi-neer-
+ []
+
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 417.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 419.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [5 <./DomainAdaptationDiagram_BnW.pdf>]
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 449.
+(Font)              <7> on input line 450.
 
-Overfull \hbox (6.33339pt too wide) in paragraph at lines 466--480
+Overfull \hbox (6.33339pt too wide) in paragraph at lines 467--481
  [] 
  []
 
@@ -234,7 +244,7 @@ Overfull \hbox (6.33339pt too wide) in paragraph at lines 466--480
 File: stepSizeCmp.pdf Graphic file (type pdf)
  <use stepSizeCmp.pdf>
 [6 <./stepSizeCmp.pdf>]
-Underfull \hbox (badness 1742) in paragraph at lines 533--541
+Underfull \hbox (badness 1742) in paragraph at lines 534--542
 \OT1/ptm/m/n/10.95 @@ Ta-bles of ex-am-ples @@'host' @@'chan-
  []
 
@@ -268,7 +278,7 @@ cal/texlive/2010/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/loca
 l/texlive/2010/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/
 2010/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2010/texmf
 -dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on naaclhlt2012.pdf (8 pages, 436747 bytes).
+Output written on naaclhlt2012.pdf (8 pages, 436716 bytes).
 PDF statistics:
  365 PDF objects out of 1000 (max. 8388607)
  223 compressed objects within 3 object streams
