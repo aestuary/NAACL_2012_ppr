@@ -68,6 +68,13 @@ Piotr Indyk and Rajeev Motwani.
   dimensionality.
 \newblock In {\em Proceedings of STOC}.
 
+\bibitem[\protect\citename{Kim \bgroup et al.\egroup }2003]{jdkim:2003}
+Jin-Dong Kim, Tomoko Ohta, Yuka Teteisi, and Jun'ichi Tsujii.
+\newblock 2003.
+\newblock Genia corpus - a semantically annotated corpus for bio-textmining.
+\newblock {\em Bioinformatics}, 19(suppl. 1):i180--i182.
+\newblock ISSN 1367-4803.
+
 \bibitem[\protect\citename{Koehn \bgroup et al.\egroup }2003]{KoehnEtAl03}
 Philipp Koehn, Franz~Josef Och, and Daniel Marcu.
 \newblock 2003.

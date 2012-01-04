@@ -4,48 +4,47 @@ The top-level auxiliary file: naaclhlt2012.aux
 The style file: naaclhlt2012.bst
 Database file #1: references.bib
 Warning--string name "acl-1995" is undefined
---line 21 of file references.bib
-Warning--I didn't find a database entry for ""
+--line 35 of file references.bib
 Warning--empty booktitle in YarowskyACL95
-You've used 26 entries,
+You've used 27 entries,
             2490 wiz_defined-function locations,
-            707 strings with 9141 characters,
-and the built_in function-call counts, 11431 in all, are:
-= -- 1163
-> -- 479
+            716 strings with 9352 characters,
+and the built_in function-call counts, 11911 in all, are:
+= -- 1213
+> -- 502
 < -- 9
-+ -- 162
-- -- 162
-* -- 796
-:= -- 1775
-add.period$ -- 107
-call.type$ -- 26
-change.case$ -- 185
-chr.to.int$ -- 26
-cite$ -- 27
-duplicate$ -- 524
-empty$ -- 913
-format.name$ -- 199
-if$ -- 2460
++ -- 170
+- -- 170
+* -- 839
+:= -- 1854
+add.period$ -- 112
+call.type$ -- 27
+change.case$ -- 193
+chr.to.int$ -- 27
+cite$ -- 28
+duplicate$ -- 539
+empty$ -- 946
+format.name$ -- 208
+if$ -- 2558
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 25
-newline$ -- 158
-num.names$ -- 78
-pop$ -- 250
+missing$ -- 26
+newline$ -- 165
+num.names$ -- 81
+pop$ -- 255
 preamble$ -- 1
-purify$ -- 211
+purify$ -- 220
 quote$ -- 0
-skip$ -- 399
+skip$ -- 410
 stack$ -- 0
-substring$ -- 458
-swap$ -- 145
+substring$ -- 490
+swap$ -- 147
 text.length$ -- 9
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 208
+type$ -- 216
 warning$ -- 1
-while$ -- 81
-width$ -- 31
-write$ -- 362
-(There were 3 warnings)
+while$ -- 84
+width$ -- 32
+write$ -- 378
+(There were 2 warnings)
