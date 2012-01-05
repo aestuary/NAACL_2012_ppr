@@ -117,8 +117,6 @@ target domain than without the domain-adapted subsampling. In addition, experime
      
 %@@  "A Generate and Rank Approach to Sentence Paraphrasing" by Malakasiotis and Androutsopoulos http://nlp.cs.aueb.gr/pubs/emnlp2011.pdf @@
 
-%@@ Zhao's work @@
-
 %@@ Interpolating paraphrase models traine \cite{Bellegarda04statisticallanguage}
 
 
@@ -269,10 +267,10 @@ Since a smaller value in cross entropy implies the closer resemblance of a sente
 In our work, we utilize this data selection method as a means to bias the relevance of our paraphrases to a domain of interest.
 % Although learning (larger size, better learning, but proved not the case here?)
 %% ==== from DomainAdaptationDescription.doc
-The overall domain adaptation procedure is illustrated in Figure 1. After the in-domain and out-of-domain language models are trained with the respective training data, they are used to calculate the cross entropy for the sentences in rest of the out-of-domain text. For a particular sentence {\em s}, the difference in cross entropy, defined as ${\Delta}$H({\em s}) = H$_{IN}$({\em s}) - H$_{OUT}$({\em s}), is used to categorize it into one of N bins, which all contain roughly the same number of sentences and are specified by the range of cross entropy difference values. The larger a ${\Delta}$H({\em s}) value is, the closer to the in-domain text this sentence {\em s} is.
-The corresponding translation of the sentences in the top bins are retrieved from the out-of-domain parallel corpus and result in a domain-adapted parallel corpus. This subsampled text then undergoes the standard bilingual pivoting framework for extracting a collection of phrases and the associated domain-adapted paraphrases. 
+The overall domain adaptation procedure is illustrated in Figure 1. After the in-domain and out-of-domain language models are trained with the respective training data, they are used to calculate the cross entropy for the sentences in rest of the general-domain text. For a particular sentence {\em s}, the difference in cross entropy, defined as ${\Delta}$H({\em s}) = H$_{IN}$({\em s}) - H$_{GEN}$({\em s}), is used to categorize it into one of N bins, which all contain roughly the same number of sentences and are specified by the range of cross entropy difference values. The larger a ${\Delta}$H({\em s}) value is, the closer to the in-domain text this sentence {\em s} is.
+The corresponding translation of the sentences in the top bins are retrieved from the general-domain parallel corpus and result in a domain-adapted parallel corpus. This subsampled text then undergoes the standard bilingual pivoting framework for extracting a collection of phrases and the associated domain-adapted paraphrases. 
 
-There is a trade-off between the amount of data for paraphrase extraction and the relevance of the paraphrases to the in-domain text. A larger number of top bins used for constructing a paraphrase table would lead to more coverage and confidence of the paraphrases, but the paraphrases would also be less applicable to the specific domain of interest.
+There is a trade-off between the amount of data for paraphrase extraction and the relevance of the paraphrases to the in-domain text. A larger number of top bins used for constructing a paraphrase table would lead to more coverage and better statistics for the paraphrases, but the paraphrases would also be less relevant to the domain of interest. The can be seen as an advantage because when the computational resources is limited, the size of the subsampled corpus can be customarily reduced without compromising its quality.
 % =====
 
 %%%
@@ -297,7 +295,7 @@ There is a trade-off between the amount of data for paraphrase extraction and th
 \includegraphics[width=.8\linewidth]{DomainAdaptationDiagram_BnW} %[width=\linewidth]
 \end{center}
 %\vspace{-.35cm}
-\caption{\small Diagram of the domain adaptation procedure based on difference in entropy. LM, CE, diffCE stand for language model, cross entropy, and difference in cross entropy, respectively. Bins of out-of-domain test data are ordered based on their diffCE values, which is proportional to the "closeness" of each individual sentences to the targeted domain. N, denoting the number of bins, is 8 in our experiment.}
+\caption{\small Diagram of the domain adaptation procedure based on difference in entropy. LM, CE, diffCE stand for language model, cross entropy, and difference in cross entropy, respectively. Bins of general-domain test data are ordered based on their diffCE values, which is proportional to the "closeness" of each individual sentences to the targeted domain. N, denoting the number of bins, is 8 in our experiment.}
 \label{pipeline_diagram}
 \end{figure*}
 
@@ -332,46 +330,44 @@ We have evaluated the effects of domain bias for various aspects of paraphrasing
 %% In-domain corpus and fixed vocabulary for LM training
 
 %{\em Language Models Training Data} 
-The majority of our evaluation is based on a target domain defined by {\em biology}-related context. We built our target domain language model using a combination of a biology textbook and the GENIA database \cite{jdkim:2003}, which are of similar sizes. The GENIA database is a collection of 1.999 biomedical publication abstracts, whereas the biology textbook is text material intended for generic introductory courses in biology.
+The majority of our evaluation is based on a target domain defined by {\em biology}-related context. We defined our target domain using a combination of a biology textbook and the GENIA database \cite{jdkim:2003}, which are of similar sizes. The GENIA database is a collection of 1.999 biomedical publication abstracts, whereas the biology textbook is text material intended for generic introductory courses in biology. We randomly selected a subset of the corpus as training data and the rest as the test data, as listed in Table \ref{}.
 
 %% === 
 The general-domain corpus comprises of the European parliament (Europarl) and Giga-French-English (GigaFrEn) corpus, which are both French-English parallel corpora and sum up to roughly 0.6 billion words on the English side. Europarl is extracted from the proceedings of the European parliament with a total of about 97 million words in the English text, while GigaFrEn was constructed by conducting a large-scale web crawl targeting bilingual web sites, and it's verging on 1 billion words \cite{callisonburch-EtAl:2009:WMT}. It captures a wide variety of topics\footnote{These sites came from a variety of sources including the Canadian government, the European Union, the United Nations, Amnesty International, the World Health Organization, and other international organizations. The crawl yielded on the order of 40 million files, consisting of more than 1TB of data. It represents the largest and most diverse parallel corpus available for research purposes.}, and is therefore perfectly suited for domain-adaptation studies for bilingually derived paraphrases.
 
-The English side of the large parallel corpus is subsampled to train a {\em general-domain} language model. For the results from different language models to be comparable, the size of the subsampled data matches that of the biology language model.
+The English side of the large parallel corpus is subsampled to train a {\em general-domain} language model. For the results from different language models to be comparable, the size of the subsampled data matches that of the biology language model. Only the remaining of the general-domain corpus, which we labeled as general-domain test set in Figure \ref{pipeline_diagram}, will be subsampled in the further stages to create a domain-adapted paraphrase table.
 
 %The non-domain-specific data consists of the Giga-French-English  and the Europarl French-English corpora,  The language models for cross entropy calculations were trained separately on data set of similar sizes to allow for comparable results. 
  %% ===
 
-To assess the effects of distinct target domains on domain-specific paraphrasing, {\em parliamentary} text was used to construct an additional target domain. Similar to general-domain language model, the English side of Europarl corpus was subsampled to match the size of that for biology domain for language model training.
+To assess the effects of distinct target domains on domain-specific paraphrasing, {\em parliamentary} text was used to construct an additional target domain. Similar to general-domain language model, the English side of Europarl corpus was subsampled to match the size of that for biology domain for language model training. 
 %Out of the (size) tokens in this collection, disjoint sets in the sizes of 
  
-{\em Language Model Vocabulary} A list of fixed vocabulary extracted from the unigrams in the in-domain training data and the textbook index, were used to train both of the language models. Preprocessing on the training data was performed in order to eliminate lines with non-sentence like structure or with too many special or repeated characters. Unigrams from the biology textbook was required to have repeated occurrences in order to be included in the vocabulary list.
-
-%{\em Preprocessing}@@ tokenization, normalization, cleaning, all preprocessing (see fileInfo.txt notes and refer to first paragraphs of Moore's section 3)
-Data from different corpora were all tokenized and lowercased. Moreover, the general-domain data was preprocessed to remove lines with any of the symbolsL {=, +, $\setminus$, \%, \#, :}, with mainly repeated words or were too short, while dashes for scientific compound words, figure captions and labels in biology text corpus were removed.
-
-@@ table of line/token counts for LM training? @@
-The input
-
-@@ srilm model params
-@@ thresholding in BiP and MonoDS scores
-@@ averaging in analysis: mean sent, median turker
-@@ emphasize what's used as "in-domain test set" and will be used repeatedly for quantitative evaluation in subsequent sections
-
-
-\subsection{Language Model Training for In-Domain Text}
+\subsection{In-Domain Language Model Training}
 \label{sect:LM_PPL}
 
+%{\em Language Model Vocabulary} 
+For each of the 2 target domains, a list of fixed vocabulary was extracted from all unigrams in the in-domain training data, which were then used for language model training. Unigrams from the training data was required to have repeated occurrences in order to be included in the vocabulary list. Biology textbook index was included in the vocabulary as well. Since {\em parliamentary} domain was only compared to {\em biology} and {\em general} domain only in terms of the paraphrases generated, it is acceptable to use different vocabulary for separate language model training. Data from each corpus was all tokenized and lowercased. Moreover, preprocessing on the training data was performed in order to eliminate lines with non-sentence like structure or with too many special or repeated characters. Dashes in scientific compound words, figure captions and labels in biology text corpus were also removed.
 
+%{\em Preprocessing}@@ tokenization, normalization, cleaning, all preprocessing (see fileInfo.txt notes and refer to first paragraphs of Moore's section 3)
+%Moreover, the general-domain data was preprocessed to remove lines with mainly repeated words, were too short or with any of the symbols: {=, +, $\setminus$, \%, \#, :}; while dashes for scientific compound words, figure captions and labels in biology text corpus were removed.
+%Training + test
+\mnote{table of line/token counts for LM training? }
+
+For each of the domain, we used the SRI Language Model Toolkit to build a 3$^{rd}$ order language model with the respective fixed vocabulary. Ney's absolute discounting \cite{Ney94} with a discount of 0.7 was applied. 
 
 \subsection{Paraphrase Extraction}
 \label{sect:method_pphrase}
-@@ take content from GEMS Sect 3.3?
+
+As explained in Section \ref{sect:diffCE},  the cross entropy difference (diffCE) according to the in-domain and general-domain language models is calculated for each sentence in the remainder of the general-domain corpus. The sentences are then sorted and grouped into ${N = 8}$ bins according to their diffCE value and Bin N, as labeled in Figure \ref{pipeline_diagram}, is the collection of sentences "closest" to the target domain.
+
+\mnote{take content from GEMS Sect 3.3?}
+For BiP and SyntBiP, the French-English parallel text from the Europarl corpus (Koehn, 2005) was used to train the paraphrase model. The parallel corpus was extracted from proceedings of the Eu- ropean parliament with a total of about 1.3 million sentences and close to 97 million words in the En- glish text. Word alignments were generated with the Berkeley aligner. For SyntBiP, the English side of the parallel corpus was parsed using the Stan- ford parser (Klein and Manning, 2003). The transla- tion models were trained with Thrax, a grammar ex- tractor for machine translation (Weese et al., 2011). Thrax extracts phrase pairs that are labeled with complex syntactic labels following Zollmann and Venugopal (2006).For MonoDS, the web-scale n-gram collection of Lin et al. (2010) was used to compute the mono- lingual distributional similarity features, using 512 bits per signature in the resultant LSH projection. Following Van Durme and Lall (2010), we implic-
+
 The parallel corpus    The bilingual pivoting 
 
-
-@@ examples
-
+@@ thresholding in BiP and MonoDS scores
+@@ averaging in analysis: mean sent, median turker
 
 %\begin{table}
 %\begin{center}
@@ -401,13 +397,7 @@ The parallel corpus    The bilingual pivoting
 %%\vspace{-.57in}
 %\end{table}
 
-
-%%%%%%% add below content to comparison paragraphs
-
-
-@@ 20111117b.rtf @@@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%@@ 20111117b.rtf @@@
 
 \section{Experimental Results}
 \label{sect:expt_results}
