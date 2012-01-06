@@ -244,10 +244,11 @@ $\cos(\frac{D(h(\vec{u}),h(\vec{v}))}{b}\pi)$, where $D()$ is Hamming distance.
 % ==========
 
 
-\section{Domain Adaptation}
+%\section{Domain Adaptation}
+\section{Methodolgy}
 \label{sect:DA}
 
-\subsection{Data Selection based on Difference in Cross Entropy}
+\subsection{Data Selection based on DiffCE}
 \label{sect:diffCE}
 
 As briefly introduced in Section \ref{sect:related_work}, \newcite{moore-lewis:2010:Short} proposed an approach for subsampling of a non-domain specific corpus based on difference in cross entropy with respect to in-domain and general-domain language models. The goal of their work was to exploit a large corpus efficiently in terms of computational resources to enhance for specific machine translation tasks. In their method, a substantially larger general-domain corpus is randomly subsampled to match the size of the much smaller in-domain text. Separate language models are trained with the in-domain text and smaller general-domain corpora, with the assumption that enough data was used to train an effective language model. The cross entropy of individual sentences in the remaining general-domain corpus are calculated according to the language models. 
@@ -359,15 +360,31 @@ For each of the domain, we used the SRI Language Model Toolkit to build a 3$^{rd
 \subsection{Paraphrase Extraction}
 \label{sect:method_pphrase}
 
-As explained in Section \ref{sect:diffCE},  the cross entropy difference (diffCE) according to the in-domain and general-domain language models is calculated for each sentence in the remainder of the general-domain corpus. The sentences are then sorted and grouped into ${N = 8}$ bins according to their diffCE value and Bin N, as labeled in Figure \ref{pipeline_diagram}, is the collection of sentences "closest" to the target domain.
+As explained in Section \ref{sect:diffCE},  the cross entropy difference (diffCE) according to the in-domain and general-domain language models was calculated for each sentence in the remainder of the general-domain corpus. The sentences were then sorted and grouped into ${N = 8}$ bins according to their diffCE value. Bin $N$, as labeled in Figure \ref{pipeline_diagram}, is the collection of sentences "closest" to the target domain.
 
-\mnote{take content from GEMS Sect 3.3?}
-For BiP and SyntBiP, the French-English parallel text from the Europarl corpus (Koehn, 2005) was used to train the paraphrase model. The parallel corpus was extracted from proceedings of the Eu- ropean parliament with a total of about 1.3 million sentences and close to 97 million words in the En- glish text. Word alignments were generated with the Berkeley aligner. For SyntBiP, the English side of the parallel corpus was parsed using the Stan- ford parser (Klein and Manning, 2003). The transla- tion models were trained with Thrax, a grammar ex- tractor for machine translation (Weese et al., 2011). Thrax extracts phrase pairs that are labeled with complex syntactic labels following Zollmann and Venugopal (2006).For MonoDS, the web-scale n-gram collection of Lin et al. (2010) was used to compute the mono- lingual distributional similarity features, using 512 bits per signature in the resultant LSH projection. Following Van Durme and Lall (2010), we implic-
+%\mnote{take content from GEMS Sect 3.3?}
+The sentences from the top bin and the corresponding French translation were considered as the domain-adapted parallel corpus, which was  used as the input of the pivot-based paraphrase acquisition. The word alignments for the corpus were generated with the Berkeley aligner. The translation models were trained with Thrax, a grammar extractor for machine translation (Weese et al., 2011) that extracts phrase pairs labeled with complex syntactic labels following Zollmann and Venugopal (2006). 
+Monolingual distributional similarity features were built using the web-scale n-gram collection of Lin et al. (2010) and the MonoDS scores were computed using 512 bits per signature in the resultant LSH projection.    %for reranking the paraphrase . The     , using . 
+Following Van Durme and Lall (2010), we implicitly represented the projection matrix with a pool of size 10,000. 
+%In order to expand the coverage of the candidates scored by the monolingual method, the LSH signatures are obtained only for the phrases in the union set of the phrase-level outputs from the original and from the syntactically constrained para- phrase models. 
+Since the n-gram corpus consists of at most 5-gram and each distributional similarity feature requires a single neighboring token, the LSH signatures are generated only for phrases that are 4-gram or less. Phrases that didn’t appear in the n-grams with at least one feature were discarded. 
 
-The parallel corpus    The bilingual pivoting 
+%@@ thresholding in BiP and MonoDS scores
+In order to reduce the set size and to filter out unreasonable paraphrases produced due to misalignment, only paraphrase candidates exceeding the BiP and MonoDS score thresholds of 0.001 and 0.5, respectively, are used for further evaluation.
 
-@@ thresholding in BiP and MonoDS scores
-@@ averaging in analysis: mean sent, median turker
+%The parallel corpus    The bilingual pivoting
+
+\subsection{Human Evaluation}
+\label{sect:mTurkEval}
+
+\mnote{gems section 4}
+
+We compared the quality of paraphrases from different domains through a manual evaluation conducted on Amazon Mechanical Turk. 
+Judges evaluated the paraphrase quality through a substitution test: For each sampled sentence, the test phrase is substituted with paraphrases pulled from the domain-adapted paraphrase tables. Judges indicated the amount of the original meaning preserved by the paraphrases and the grammaticality of the resulting sentences. They assigned two values to each sentence using the 5-point scales defined in Callison-Burch (2008). Each substitution is rated by 3 different judges.
+
+@ phrase selection criteria and params @
+%A set of 100 test phrases were selected and for each test phrase, five distinct sentences were randomly sampled to capture the fact that paraphrases are valid in some contexts but not others (Szpektor et al., 2007).  The sentences and the phrases are drawn from the English side of the Europarl corpus. %The 100 test phrases consisted of 25 unigrams, 25 bigrams, 25 trigrams and 25 4-grams. These 25 phrases were randomly sampled from the paraphrase table generated by the bilingual pivoting method, with the following restrictions:%• The phrase must have occurred at least 5 times in the parallel corpus and must have appeared in the web-scale n-grams.%• The size of the union of paraphrase candidates from BiP and SyntBiP must be 10 or more.
+Context dependency was considered in the evaluation by using sentences from 3 sources: biology textbook, Europarl corpus, and giga-French-English corpus. For a given phrase, up to 5 distinct sentences from each of the sources are randomly selected for substitution.
 
 %\begin{table}
 %\begin{center}
@@ -404,8 +421,9 @@ The parallel corpus    The bilingual pivoting
 
 
 
-\subsection{Subsampling Methods Comparison}
-\label{sect:otherSubsampling}
+
+\subsection{Effect of Subsampling Sizes}
+\label{sect:steppedCmp}
 % ================  Stats/setup for domain adaptation vs Random at various sample sizes ================ %
 \begin{table}[t!]
 \begin{center}
@@ -428,8 +446,46 @@ The parallel corpus    The bilingual pivoting
 \label{tbl_steppedSizeStats}
 \end{table}
 
-Although domain-biased subsampling is expected to outperform random sampling, the common notion that "more data beats better algorithms" implies that the effect of domain-bias can potentially be masked by the size of a randomly subsampled corpus. To investigate the gain of applying domain adaptation to paraphrasing, corpora at various sizes are subsampled with each method and used for language model training independently. The line and token counts of each pair of corpora at different sizes are listed in Table \ref{tbl_steppedSizeStats}.
+The common notion that "more data beats better algorithms" implies that, even if domain-biased subsampling outperforms random sampling, the effect of domain-bias can potentially be masked by the size of a randomly subsampled corpus. To investigate the gain of applying domain adaptation to paraphrasing, corpora are subsampled at various sizes with each method and used for language model training independently. The line and token counts of each pair of corpora at different sizes are listed in Table \ref{tbl_steppedSizeStats}.
 
+% ================= Domain adaptation vs Random at various sample sizes ================== %
+%
+%\begin{table}[t!]
+%\begin{center}
+%\begin{tabular}{c|cc}%{|l|l|l|}
+%\hline\hline 
+%{\bf \footnotesize Size (Token)} & {\bf \footnotesize DiffCE} & {\bf \footnotesize Random} \\
+%\hline
+%%\bf \footnotesize BiP & \bf \footnotesize SyntBiP & \bf \footnotesize BiP-MonoDS \\ \hline
+%{\scriptsize $\sim$28M} & {\scriptsize 329.5} & {\scriptsize 954.4} \\
+%{\scriptsize $\sim$56M} & {\scriptsize 359.9} &{\scriptsize 856.9} \\
+%{\scriptsize $\sim$111M}& {\scriptsize 424.7}& {\scriptsize 775.4} \\
+%{\scriptsize $\sim$230M} & {\scriptsize 531.4} & {\scriptsize 699.4}\\
+%\hline
+%\end{tabular}
+%\end{center}
+%%\vspace{-.25cm}
+%\caption{In-domain test data perplexity according to language models trained based on difference in entropy (DiffCE) and random sampling (random) as a function of sample size.} 
+%\label{tbl_steppedSizePPL}
+%\end{table}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=1\linewidth]{stepSizeCmp} %[width=\linewidth]
+\end{center}
+\vspace{-.35cm}
+\caption{\small In-domain test data perplexity according to language models trained based on difference in entropy (DiffCE) and random sampling (random) as a function of sample size.}
+\label{stepSizeCmp}
+\end{figure}
+
+
+The in-domain test perplexity of domain-adapted and random subsampling at different sizes are compared in Figure \ref{stepSizeCmp}. The domain-adapted language model results in less perplexity than that with random subsampling throughout the two curves. This implies that for all the corpus sizes, the language model trained on the data subsampled according to difference in cross entropy achieves better prediction than the baseline of random sampling. This plot is comparable to the empirical result obtained in \newcite{moore-lewis:2010:Short}, which suggested that diffCE is more effective in terms of test set perplexity, especially when training set size is small.
+
+The reason for the perplexity curves to merge as corpus size increases is obvious: the domain-specific corpus grows by including sentences less related to the biology domain. At a size of about 230M tokens, which is about half the size of the original giga-French-English corpus, the two subsampling methods are expected to have large amount of overlap, hence resulting similar perplexity values. On the other hand, a  divergence of LM performance as the corpus size decreases implies that intelligent subsampling would offer an advantage when computational speed or storage is a limitation.
+
+
+\subsection{Subsampling Methods Comparison}
+\label{sect:otherSubsampling}
 
 % ================  DiffCE vs JOSHUA ================ %
 \begin{table}[t!]
@@ -468,7 +524,8 @@ Due to computational constraints, research in MT typically employs simple subsam
 \hline
 {\bf \footnotesize Corpus} & {\bf \footnotesize 1}& {\bf \footnotesize 2}& {\bf \footnotesize 3}& {\bf \footnotesize 4}& {\bf \footnotesize Total} \\
 \hline
-{\scriptsize Europarl} & {\scriptsize 11,536} & {\scriptsize 55,373} & {\scriptsize 42,540} & {\scriptsize 13,851}& {\scriptsize 123,300} \\
+%{\scriptsize Europarl} & {\scriptsize 11,536} & {\scriptsize 55,373} & {\scriptsize 42,540} & {\scriptsize 13,851}& {\scriptsize 123,300} \\
+{\scriptsize Europarl} & {\scriptsize 10,688} & {\scriptsize 48,493} & {\scriptsize 34,621} & {\scriptsize 9,079}& {\scriptsize 102,881} \\
 {\scriptsize Top} & {\scriptsize 16,771} & {\scriptsize 91,697} & {\scriptsize 67,737} & {\scriptsize 18,292} & {\scriptsize 194,497} \\
 {\scriptsize Bottom} & {\scriptsize 9,022} & {\scriptsize 25,835} & {\scriptsize 11,575} & {\scriptsize 2,008}& {\scriptsize 48,440} \\
 {\scriptsize Random}  & {\scriptsize 14,606} & {\scriptsize 66,656} & {\scriptsize 45,207} & {\scriptsize 11,616} & {\scriptsize 138,085} \\
@@ -485,46 +542,17 @@ Due to computational constraints, research in MT typically employs simple subsam
 Table \ref{tbl_ppTableCoverage} reports the overlap between the unique phrases of up to 4-gram from the biology textbook and each of the paraphrase tables generated from different subsampled corpora. Although all of the paraphrase tables were constructed with corpora of very similar sizes, the domain-biased paraphrase table, labeled as {\em Top}, contains the most number of phrases in the biology textbook across all 4 n-gram lengths. This highlights that intelligent selection of corpus for bilingual pivoting facilitates an increase of the paraphrase coverage for a task of interest.
 
 
-
-% ================= Domain adaptation vs Random at various sample sizes ================== %
-%
-%\begin{table}[t!]
-%\begin{center}
-%\begin{tabular}{c|cc}%{|l|l|l|}
-%\hline\hline 
-%{\bf \footnotesize Size (Token)} & {\bf \footnotesize DiffCE} & {\bf \footnotesize Random} \\
-%\hline
-%%\bf \footnotesize BiP & \bf \footnotesize SyntBiP & \bf \footnotesize BiP-MonoDS \\ \hline
-%{\scriptsize $\sim$28M} & {\scriptsize 329.5} & {\scriptsize 954.4} \\
-%{\scriptsize $\sim$56M} & {\scriptsize 359.9} &{\scriptsize 856.9} \\
-%{\scriptsize $\sim$111M}& {\scriptsize 424.7}& {\scriptsize 775.4} \\
-%{\scriptsize $\sim$230M} & {\scriptsize 531.4} & {\scriptsize 699.4}\\
-%\hline
-%\end{tabular}
-%\end{center}
-%%\vspace{-.25cm}
-%\caption{In-domain test data perplexity according to language models trained based on difference in entropy (DiffCE) and random sampling (random) as a function of sample size.} 
-%\label{tbl_steppedSizePPL}
-%\end{table}
-
-\begin{figure}
-\begin{center}
-\includegraphics[width=1\linewidth]{stepSizeCmp} %[width=\linewidth]
-\end{center}
-\vspace{-.35cm}
-\caption{\small In-domain test data perplexity according to language models trained based on difference in entropy (DiffCE) and random sampling (random) as a function of sample size.}
-\label{stepSizeCmp}
-\end{figure}
-
-
-Domain adapting and random subsampling are compared in Figure \ref{stepSizeCmp} at various sizes as listed previously in Table \ref{tbl_steppedSizeStats}. The domain specific subsampling results in less perplexity than random selection throughout the two curves, which indicates that, at each of the increasing corpus sizes, the language model trained on the data subsampled with difference in cross entropy remains better at prediction than the baseline of random sampling. This plot is comparable to the empirical result obtained in \newcite{moore-lewis:2010:Short}, which suggested that diffCE is more effective in terms of test set perplexity as training set size decreases.
-
-The reason for the perplexity curves to merge as corpus size increases is obvious: the domain-specific corpus grows by including sentences less related to the biology domain. At a size of about 230M tokens, which is about half the size of the original giga-French-English corpus, the two subsampling methods are expected to have large amount of overlap, hence resulting similar perplexity values. Such convergence of performance in both subsampling methods as the corpus size increases should not be a concern because under the scenario of interest,  intelligent subsampling would constitute an advantage when computational speed or storage is a limitation.
-
-
 % ======================================== %
 	
 	
+
+\subsection{Human Evaluation Results}
+\label{sect:mTurk_results}
+%\mnote{analysis}
+Before analyzing the data collected from the Amazon Mechanical Turk experiment, for a paraphrase associated with a particular phrase, we took the median of the 3 judgment scores for a particular sentence substitution. We then averaged across the difference sentences in which the substitution took place.
+
+%@@ averaging in analysis: mean sent, median turker
+
 
 \subsection{Paraphrase Examples}
 \label{sect:example_pphrases}
