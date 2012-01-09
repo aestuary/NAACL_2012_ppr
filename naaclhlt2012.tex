@@ -87,7 +87,7 @@ target domain than without the domain-adapted subsampling. In addition, experime
 
 %% === Ben
 
-\section{Related Work}
+\section{Background}
 \label{sect:related_work}
 
 
@@ -115,7 +115,6 @@ target domain than without the domain-adapted subsampling. In addition, experime
 \newcite{Schroeder07experimentsin} carried out experiments to compare end-to-end machine translations performance in terms of translation scores (BLEU) for a range of domain adaptation techniques applied to training data selection. Some of the techniques include in-domain language model, interpolating language model to bias towards specific domains, and simply combining training data. They showed that best BLEU scores are achieved with by adapting the training data to the domain of interest using language models. 
      
      
-%@@  "A Generate and Rank Approach to Sentence Paraphrasing" by Malakasiotis and Androutsopoulos http://nlp.cs.aueb.gr/pubs/emnlp2011.pdf @@
 
 %@@ Interpolating paraphrase models traine \cite{Bellegarda04statisticallanguage}
 
@@ -191,7 +190,10 @@ where ${p(e_2|e_1)}$ is the paraphrase probability, and ${p(e|f)}$ and ${p(f|e)}
 Anecdotally, this paraphrase probability sometimes seems unable to discriminate between good and bad paraphrases, so some researchers disregard it and treat the extracted paraphrases as an unsorted set \cite{Snover2010}.  \newcite{CallisonBurch08} attempts to improve the ranking by limiting paraphrases to be the same syntactic type.  
 
 We attempt to rerank the paraphrases using other information. This is similar to the efforts of \newcite{ZhaoEtAlACL08}, who made use of multiple resources %, namely the thesaurus, monolingual parallel corpus, monolingual comparable corpus, bilingual phrase table, dictionary definitions, clusters of similar user queries, and self paraphrase 
-to derive feature functions and extract paraphrase tables. The paraphrase that maximizes a log-linear combination of various feature functions is then selected as the optimal paraphrase. Feature weights in the model are optimized by minimizing a {\it phrase substitution error rate}, a measure proposed by the authors, on a development set.
+to derive feature functions and extract paraphrase tables. The paraphrase that maximizes a log-linear combination of various feature functions is then selected as the optimal paraphrase. Feature weights in the model are optimized by minimizing a {\it phrase substitution error rate}, a measure proposed by the authors, on a development set. \newcite{malakasiotis-androutsopoulos:2011:EMNLP} extended this approach by incorporating more sophisticated reranking techniques such as Support Vector Regression and Maximum Entropy classifier. In our approach, we investigate the benefit of integrating orthogonal information through reranking with monolingual distributional similarity scores, which is elaborated in Section \ref{sect:MonoDS}.
+
+
+%@@  "A Generate and Rank Approach to Sentence Paraphrasing" by Malakasiotis and Androutsopoulos http://nlp.cs.aueb.gr/pubs/emnlp2011.pdf @@
 % ===========
 
 \subsection{Monolingual Distributional Similarity}
@@ -245,7 +247,7 @@ $\cos(\frac{D(h(\vec{u}),h(\vec{v}))}{b}\pi)$, where $D()$ is Hamming distance.
 
 
 %\section{Domain Adaptation}
-\section{Methodolgy}
+\section{Methodology}
 \label{sect:DA}
 
 \subsection{Data Selection based on DiffCE}
@@ -355,7 +357,7 @@ For each of the 2 target domains, a list of fixed vocabulary was extracted from 
 %Training + test
 \mnote{table of line/token counts for LM training? }
 
-For each of the domain, we used the SRI Language Model Toolkit to build a 3$^{rd}$ order language model with the respective fixed vocabulary. Ney's absolute discounting \cite{Ney94} with a discount of 0.7 was applied. 
+For each of the domain, we used the SRI Language Model Toolkit\footnote{http://www-speech.sri.com/} to build a 3$^{rd}$ order language model with the respective fixed vocabulary. Ney's absolute discounting \cite{Ney94} with a discount of 0.7 was applied. 
 
 \subsection{Paraphrase Extraction}
 \label{sect:method_pphrase}
