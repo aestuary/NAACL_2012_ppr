@@ -265,7 +265,7 @@ $\cos(\frac{D(h(\vec{u}),h(\vec{v}))}{b}\pi)$, where $D()$ is Hamming distance.
 
 As briefly introduced in Section \ref{sect:related_work}, \newcite{moore-lewis:2010:Short} proposed an approach for subsampling of a non-domain specific corpus based on difference in cross entropy with respect to in-domain and general-domain language models. The goal of their work was to exploit a large corpus efficiently in terms of computational resources to enhance for specific machine translation tasks. In their method, a substantially larger general-domain corpus is randomly subsampled to match the size of the much smaller in-domain text. Separate language models are trained with the in-domain text and smaller general-domain corpora, with the assumption that enough data was used to train an effective language model. The cross entropy of individual sentences in the remaining general-domain corpus are calculated according to the language models. 
 
-Since a smaller value in cross entropy implies the closer resemblance of a sentence to the domain of the language model, the difference in cross entropy can serve as metric for selecting a subset of the non-domain-specific corpus that matches more with the in-domain data than the out-of-domain data. Moore and Lewis showed that, across a range of subsampled data sizes, their subsampling method produced much smaller perplexity for in-domain test data as compared to methods such as Klakow's method, in-domain cross-entropy scoring and random selection.
+Since a smaller value in cross entropy implies the closer resemblance of a sentence to the domain of the language model, the difference in cross entropy can serve as metric for selecting a subset of the non-domain-specific corpus that matches more with the in-domain data than the out-of-domain data. \newcite{moore-lewis:2010:Short} showed that, across a range of subsampled data sizes, their subsampling method produced much smaller perplexity for in-domain test data as compared to methods such as Klakow's method, in-domain cross-entropy scoring and random selection.
 
 %%%
 %In our framework, we used the content of biology textbook to construct an in-domain statistical language model with a monolingual collection of domain specific content, such as the pages of a biology textbook.
@@ -343,7 +343,28 @@ We have evaluated the effects of domain bias for various aspects of paraphrasing
 %% In-domain corpus and fixed vocabulary for LM training
 
 %{\em Language Models Training Data} 
-The majority of our evaluation is based on a target domain defined by {\em biology}-related context. We defined our target domain using a combination of a biology textbook and the GENIA database \cite{jdkim:2003}, which are of similar sizes. The GENIA database is a collection of 1.999 biomedical publication abstracts, whereas the biology textbook is text material intended for generic introductory courses in biology. We randomly selected a subset of the corpus as training data and the rest as the test data, as listed in Table \ref{}.
+The majority of our evaluation is based on a target domain defined by {\em biology}-related context. We defined our target domain using a combination of a biology textbook and the GENIA database \cite{jdkim:2003}, which are of similar sizes. The GENIA database is a collection of 1.999 biomedical publication abstracts, whereas the biology textbook is text material intended for generic introductory courses in biology. We randomly selected a subset of the corpus as training data and the rest as the test data, as listed in Table \ref{tbl_StatsLM_train}.
+
+
+% ================  Stats on LM training dataset sizes ================ %
+\begin{table}[t!]
+\begin{center}
+\begin{tabular}{l|c|c}%{|l|l|l|}
+\hline\hline 
+& {\bf \scriptsize Train} & {\bf \scriptsize Test} \\
+{\bf \scriptsize Domain} & {\scriptsize Line / Token count} & {\scriptsize Line/Token count} \\
+ \hline
+{\bf \scriptsize General} & {\scriptsize 60,000 / 1,763,084} & {\scriptsize 20,347,491 / 568,996,738}\\
+{\bf \scriptsize Biology} & {\scriptsize 64,665 / 1,226,823} & {\scriptsize 3,377 / 75,193}\\
+{\bf \scriptsize Parliamentary} & {\scriptsize  61,113 / 1,589,385} & {\scriptsize --- }\\
+\hline
+\end{tabular}
+\end{center}
+%\vspace{-.25cm}
+\caption{Statistics of training and test data for language models training in multiple domains} 
+\label{tbl_StatsLM_train}
+\end{table}
+
 
 %% === 
 The general-domain corpus comprises of the European parliament (Europarl) and Giga-French-English (GigaFrEn) corpus, which are both French-English parallel corpora and sum up to roughly 0.6 billion words on the English side. Europarl is extracted from the proceedings of the European parliament with a total of about 97 million words in the English text, while GigaFrEn was constructed by conducting a large-scale web crawl targeting bilingual web sites, and it's verging on 1 billion words \cite{callisonburch-EtAl:2009:WMT}. It captures a wide variety of topics\footnote{These sites came from a variety of sources including the Canadian government, the European Union, the United Nations, Amnesty International, the World Health Organization, and other international organizations. The crawl yielded on the order of 40 million files, consisting of more than 1TB of data. It represents the largest and most diverse parallel corpus available for research purposes.}, and is therefore perfectly suited for domain-adaptation studies for bilingually derived paraphrases.
@@ -365,14 +386,33 @@ For each of the 2 target domains, a list of fixed vocabulary was extracted from 
 %{\em Preprocessing}@@ tokenization, normalization, cleaning, all preprocessing (see fileInfo.txt notes and refer to first paragraphs of Moore's section 3)
 %Moreover, the general-domain data was preprocessed to remove lines with mainly repeated words, were too short or with any of the symbols: {=, +, $\setminus$, \%, \#, :}; while dashes for scientific compound words, figure captions and labels in biology text corpus were removed.
 %Training + test
-\mnote{table of line/token counts for LM training? }
+
 
 For each of the domain, we used the SRI Language Model Toolkit\footnote{http://www-speech.sri.com/} to build a 3$^{rd}$ order language model with the respective fixed vocabulary. Ney's absolute discounting \cite{Ney94} with a discount of 0.7 was applied. 
 
 \subsection{Paraphrase Extraction}
 \label{sect:method_pphrase}
 
-As explained in Section \ref{sect:diffCE},  the cross entropy difference (diffCE) according to the in-domain and general-domain language models was calculated for each sentence in the remainder of the general-domain corpus. The sentences were then sorted and grouped into ${N = 8}$ bins according to their diffCE value. Bin $N$, as labeled in Figure \ref{pipeline_diagram}, is the collection of sentences "closest" to the target domain.
+As explained in Section \ref{sect:diffCE},  the cross entropy difference (diffCE) according to the in-domain and general-domain language models was calculated for each sentence in the remainder of the general-domain corpus. The sentences were then sorted and grouped into ${N = 8}$ bins according to their diffCE value. Bin $N$, as labeled in Figure \ref{pipeline_diagram}, is the collection of sentences "closest" to the target domain. The statistics of resulting subsampled corpora are listed in Table \ref{tbl_StatsPPTableCorpora}
+
+% ================  Stats on subsampled corpora for ppTables ================ %
+\begin{table}[t!]
+\begin{center}
+%\begin{tabular}{p{1.6cm}|c|c}%{|l|l|l|}
+\begin{tabular}{l|c|c}%{|l|l|l|}
+\hline\hline 
+{\bf \scriptsize Domain} & {\scriptsize Line count} & {\scriptsize Token count} \\
+ \hline
+{\bf \scriptsize General (Random)} & {\scriptsize 1,251,556} & {\scriptsize 27,155,436}\\
+{\bf \scriptsize Biology} & {\scriptsize 1,152,913} & {\scriptsize 21,874,327}\\
+{\bf \scriptsize Parliamentary} & {\scriptsize 1,138,581} & {\scriptsize 23,900,459}\\
+\hline
+\end{tabular}
+\end{center}
+%\vspace{-.25cm}
+\caption{Statistics of subsampled corpora (after pre-processing) used for generating domain-adapted paraphrase tables} 
+\label{tbl_StatsPPTableCorpora}
+\end{table}
 
 %\mnote{take content from GEMS Sect 3.3?}
 The sentences from the top bin and the corresponding French translation were considered as the domain-adapted parallel corpus, which was  used as the input of the pivot-based paraphrase acquisition. The word alignments for the corpus were generated with the Berkeley aligner. The translation models were trained with Thrax, a grammar extractor for machine translation (Weese et al., 2011) that extracts phrase pairs labeled with complex syntactic labels following Zollmann and Venugopal (2006). 
@@ -441,7 +481,7 @@ Context dependency was considered in the evaluation by using sentences from 3 so
 \begin{center}
 \begin{tabular}{ll|ll}%{|l|l|l|}
 \hline\hline 
-\multicolumn{2}{c|} {\bf \scriptsize DiffCE} & \multicolumn{2}{c} {\bf \scriptsize Random} \\
+\multicolumn{2}{c|} {\bf \scriptsize DiffCE} & \multicolumn{2}{c} {\bf \scriptsize Random (General-domain)} \\
 \hline
 {\bf \footnotesize Line count}  & {\bf \footnotesize Token count} &{\bf \footnotesize Line count}  & {\bf \footnotesize Token count}\\
 \hline
@@ -546,7 +586,7 @@ Due to computational constraints, research in MT typically employs simple subsam
 \hline
 \end{tabular}
 \end{center}
-\caption{Number of unique N grams in biology textbook that appear in the paraphrase tables generated with different subsampling methods, where {\em Top} and {\em Bottom} refer to the domain adapted domains closest and furthest from the domain of interest, respectively } 
+\caption{Paraphrase table coverage in terms of number of unique N grams in biology textbook that appear in the paraphrase tables generated with different subsampling. {\em Top} and {\em Bottom}, respectively, refer to the domain adaptation closest and furthest from the biology domain.} 
 \label{tbl_ppTableCoverage}
 \end{table}
 % source: ~tsz/vulcan/ppTableCoverageStats
@@ -576,7 +616,8 @@ Before analyzing the data collected from the Amazon Mechanical Turk experiment, 
 @@'water' or 'sodium hydroxide' or 'cholesterol'
 @@'activation'
 @@'peripheral'
-@@get content from %20111110_LM_adapt_afterExtraction_examples.xlsx AND thresholded paraphrase tables
+@@'replenish'
+@@get content from files:%20111110_LM_adapt_afterExtraction_examples.xlsx AND thresholded paraphrase tables
 
 %\begin{table}
 %\begin{center}
