@@ -112,12 +112,22 @@ target domain than without the domain-adapted subsampling. In addition, experime
 
 %- training of the addition feature augmentation does not explicitly yield the degree of relevance of the additional text to the target domain; classifier features from the additional text are only considered jointly with the features from other domains to enhance the specific task at hand
 
-\newcite{Schroeder07experimentsin} carried out experiments to compare end-to-end machine translations performance in terms of translation scores (BLEU) for a range of domain adaptation techniques applied to training data selection. Some of the techniques include in-domain language model, interpolating language model to bias towards specific domains, and simply combining training data. They showed that best BLEU scores are achieved with by adapting the training data to the domain of interest using language models. 
+\newcite{Schroeder07experimentsin} carried out experiments to compare end-to-end machine translations performance in terms of translation scores (BLEU) for a range of domain adaptation techniques applied to training data selection. Some of the techniques include in-domain language model, interpolating language model to bias towards specific domains, and simply combining training data. They showed that best BLEU scores are achieved with by adapting the training data to the domain of interest using language model features. 
      
      
+% @@ poon, 
+Recent work of \newcite{poon-domingos:2009:EMNLP} applied unsupervised semantic parsing (USP) to structural paraphrasing or pattern-matching by clustering expressions with the same meaning in a recursive manner. The evaluation of their method was performed  for the task of question answering on a collection of biomedical journal abstracts, which is also a part of the data we use in our work. Their method outperformed all other QA systems under comparison in terms of accuracy. %Under %unfair :)
+%comparison, their method outperforms all other QA systems.
+\newcite{titov-klementiev:2011:ACL-HLT2011} developed a bayesian model for semantic parsing that learns  structurally similar expressions or paraphrases based on frame-semantic parsing, rather than the lambda calculus formalism used in \newcite{poon-domingos:2009:EMNLP}. Their method achieved similar accuracy in the same QA task and the USP.
+
+%
+%from ben:
+%papers by Poon and then
+%Alex/Titov.  Those were both on the same abstracts that make up a part
+%of our bio collection, where they showed QA results using
+%paraphrase-like structural rewrites/pattern-matching.
 
 %@@ Interpolating paraphrase models traine \cite{Bellegarda04statisticallanguage}
-
 
 % ===== 
 %\paragraph{Domain Adaption for Paraphrasing}
