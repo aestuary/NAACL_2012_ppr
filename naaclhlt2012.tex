@@ -281,7 +281,8 @@ In our work, we utilize this data selection method as a means to bias the releva
 % Although learning (larger size, better learning, but proved not the case here?)
 %% ==== from DomainAdaptationDescription.doc
 The overall domain adaptation procedure is illustrated in Figure 1. After the in-domain and out-of-domain language models are trained with the respective training data, they are used to calculate the cross entropy for the sentences in rest of the general-domain text. For a particular sentence {\em s}, the difference in cross entropy, defined as ${\Delta}$H({\em s}) = H$_{IN}$({\em s}) - H$_{GEN}$({\em s}), is used to categorize it into one of N bins, which all contain roughly the same number of sentences and are specified by the range of cross entropy difference values. The larger a ${\Delta}$H({\em s}) value is, the closer to the in-domain text this sentence {\em s} is.
-The corresponding translation of the sentences in the top bins are retrieved from the general-domain parallel corpus and result in a domain-adapted parallel corpus. This subsampled text then undergoes the standard bilingual pivoting framework for extracting a collection of phrases and the associated domain-adapted paraphrases. 
+
+The corresponding translation of the sentences in the top bins are retrieved from the general-domain parallel corpus and result in a domain-adapted parallel corpus. This subsampled text then undergoes the standard bilingual pivoting framework for extracting a collection of phrases and the associated domain-adapted paraphrases. 
 
 There is a trade-off between the amount of data for paraphrase extraction and the relevance of the paraphrases to the in-domain text. A larger number of top bins used for constructing a paraphrase table would lead to more coverage and better statistics for the paraphrases, but the paraphrases would also be less relevant to the domain of interest. The can be seen as an advantage because when the computational resources is limited, the size of the subsampled corpus can be customarily reduced without compromising its quality.
 % =====
@@ -324,7 +325,7 @@ For bilingual paraphrase acquisition, by biasing the domain of the parallel corp
 
 %{\bf Monolingual Distributional Similarity}
 
-The similarity score based on monolingual distributional similarity (MonoDS) was originally proposed to be computed using the Google ngram corpus \cite{LinEtAlLREC10}, which comprises of statistics from general domain of resources on the internet. While large amount of data might lead to a better vector space model for the MonoDS score, adapting a training corpus to the target domain can potentially enhance the relevance of the paraphrases reranking.
+The similarity score based on monolingual distributional similarity (MonoDS) was originally proposed to be computed using the Google n-gram corpus \cite{LinEtAlLREC10}, which comprises of statistics from general domain of resources on the internet. While large amount of data might lead to a better vector space model for the MonoDS score, adapting a training corpus to the target domain can potentially enhance the relevance of the paraphrases reranking.
 
 %{\bf Log-linear Model Training}
 
@@ -343,7 +344,7 @@ We have evaluated the effects of domain bias for various aspects of paraphrasing
 %% In-domain corpus and fixed vocabulary for LM training
 
 %{\em Language Models Training Data} 
-The majority of our evaluation is based on a target domain defined by {\em biology}-related context. We defined our target domain using a combination of a biology textbook and the GENIA database \cite{jdkim:2003}, which are of similar sizes. The GENIA database is a collection of 1.999 biomedical publication abstracts, whereas the biology textbook is text material intended for generic introductory courses in biology. We randomly selected a subset of the corpus as training data and the rest as the test data, as listed in Table \ref{tbl_StatsLM_train}.
+The majority of our evaluation is based on a target domain defined by {\em biology}-related context. We defined our target domain using a combination of a biology textbook and the GENIA database \cite{jdkim:2003}, which are of similar sizes. The GENIA database is a collection of 1.999 biomedical publication abstracts, whereas the biology textbook is text material intended for collegiate introductory courses in biology. We randomly selected a subset of the corpus as training data for language model training and the rest as the test data for evaluation, as listed in Table \ref{tbl_StatsLM_train}.
 
 
 % ================  Stats on LM training dataset sizes ================ %
@@ -416,7 +417,8 @@ As explained in Section \ref{sect:diffCE},  the cross entropy difference (diffCE
 
 %\mnote{take content from GEMS Sect 3.3?}
 The sentences from the top bin and the corresponding French translation were considered as the domain-adapted parallel corpus, which was  used as the input of the pivot-based paraphrase acquisition. The word alignments for the corpus were generated with the Berkeley aligner. The translation models were trained with Thrax, a grammar extractor for machine translation (Weese et al., 2011) that extracts phrase pairs labeled with complex syntactic labels following Zollmann and Venugopal (2006). 
-Monolingual distributional similarity features were built using the web-scale n-gram collection of Lin et al. (2010) and the MonoDS scores were computed using 512 bits per signature in the resultant LSH projection.    %for reranking the paraphrase . The     , using . 
+
+Monolingual distributional similarity features were built using the web-scale n-gram collection of Lin et al. (2010) and the MonoDS scores were computed using 512 bits per signature in the resultant LSH projection.    %for reranking the paraphrase . The     , using . 
 Following Van Durme and Lall (2010), we implicitly represented the projection matrix with a pool of size 10,000. 
 %In order to expand the coverage of the candidates scored by the monolingual method, the LSH signatures are obtained only for the phrases in the union set of the phrase-level outputs from the original and from the syntactically constrained para- phrase models. 
 Since the n-gram corpus consists of at most 5-gram and each distributional similarity feature requires a single neighboring token, the LSH signatures are generated only for phrases that are 4-gram or less. Phrases that didn’t appear in the n-grams with at least one feature were discarded. 
@@ -435,7 +437,10 @@ We compared the quality of paraphrases from different domains through a manual e
 Judges evaluated the paraphrase quality through a substitution test: For each sampled sentence, the test phrase is substituted with paraphrases pulled from the domain-adapted paraphrase tables. Judges indicated the amount of the original meaning preserved by the paraphrases and the grammaticality of the resulting sentences. They assigned two values to each sentence using the 5-point scales defined in Callison-Burch (2008). Each substitution is rated by 3 different judges.
 
 @ phrase selection criteria and params @
-%A set of 100 test phrases were selected and for each test phrase, five distinct sentences were randomly sampled to capture the fact that paraphrases are valid in some contexts but not others (Szpektor et al., 2007).  The sentences and the phrases are drawn from the English side of the Europarl corpus. %The 100 test phrases consisted of 25 unigrams, 25 bigrams, 25 trigrams and 25 4-grams. These 25 phrases were randomly sampled from the paraphrase table generated by the bilingual pivoting method, with the following restrictions:%• The phrase must have occurred at least 5 times in the parallel corpus and must have appeared in the web-scale n-grams.%• The size of the union of paraphrase candidates from BiP and SyntBiP must be 10 or more.
+%A set of 100 test phrases were selected and for each test phrase, five distinct sentences were randomly sampled to capture the fact that paraphrases are valid in some contexts but not others (Szpektor et al., 2007).  The sentences and the phrases are drawn from the English side of the Europarl corpus. 
+%The 100 test phrases consisted of 25 unigrams, 25 bigrams, 25 trigrams and 25 4-grams. These 25 phrases were randomly sampled from the paraphrase table generated by the bilingual pivoting method, with the following restrictions:
+%• The phrase must have occurred at least 5 times in the parallel corpus and must have appeared in the web-scale n-grams.
+%• The size of the union of paraphrase candidates from BiP and SyntBiP must be 10 or more.
 Context dependency was considered in the evaluation by using sentences from 3 sources: biology textbook, Europarl corpus, and giga-French-English corpus. For a given phrase, up to 5 distinct sentences from each of the sources are randomly selected for substitution.
 
 %\begin{table}
@@ -490,7 +495,7 @@ Context dependency was considered in the evaluation by using sentences from 3 so
 {\scriptsize 2,543,466} & {\scriptsize 56,384,338} & {\scriptsize 2,540,000} & {\scriptsize 55,733,642}  \\
 {\scriptsize 5,086,899} & {\scriptsize 119,776,920} & {\scriptsize 5,080,000} & {\scriptsize 111,478,225}  \\
 {\scriptsize 10,173,762} & {\scriptsize 263,492,323} & {\scriptsize 10,160,000} & {\scriptsize 222,917,055}  \\
-\hline
+%\hline
 \end{tabular}
 \end{center}
 %\vspace{-.25cm}
@@ -548,7 +553,7 @@ The reason for the perplexity curves to merge as corpus size increases is obviou
  \hline
 {\bf \scriptsize DiffCE} & {\scriptsize 573,659 / 12,779,577} & {\scriptsize 319.2}\\
  {\bf \scriptsize Subsampling$_{Joshua}$} & {\scriptsize 573,659 / 10,667,535} & {\scriptsize 604.4}\\
-\hline
+%\hline
 \end{tabular}
 \end{center}
 %\vspace{-.25cm}
@@ -572,8 +577,8 @@ Due to computational constraints, research in MT typically employs simple subsam
 \begin{center}
 \begin{tabular}{l|cccc|c}%{|l|l|l|}
 \hline\hline 
-&\multicolumn{4}{c|} {\bf \scriptsize N-gram} &\\
-\hline
+&\multicolumn{4}{c|} {\bf \scriptsize n-gram} &\\
+%\hline
 {\bf \footnotesize Corpus} & {\bf \footnotesize 1}& {\bf \footnotesize 2}& {\bf \footnotesize 3}& {\bf \footnotesize 4}& {\bf \footnotesize Total} \\
 \hline
 %{\scriptsize Europarl} & {\scriptsize 11,536} & {\scriptsize 55,373} & {\scriptsize 42,540} & {\scriptsize 13,851}& {\scriptsize 123,300} \\
@@ -583,10 +588,10 @@ Due to computational constraints, research in MT typically employs simple subsam
 {\scriptsize Random}  & {\scriptsize 14,606} & {\scriptsize 66,656} & {\scriptsize 45,207} & {\scriptsize 11,616} & {\scriptsize 138,085} \\
 \hline
 {\scriptsize Textbook} & {\scriptsize 21,422} & {\scriptsize 212,408} & {\scriptsize 433,425} & {\scriptsize 512,515} & {\scriptsize 1,179,770} \\
-\hline
+%\hline
 \end{tabular}
 \end{center}
-\caption{Paraphrase table coverage in terms of number of unique N grams in biology textbook that appear in the paraphrase tables generated with different subsampling. {\em Top} and {\em Bottom}, respectively, refer to the domain adaptation closest and furthest from the biology domain.} 
+\caption{Paraphrase table coverage in terms of number of unique n-grams in biology textbook that appear in the paraphrase tables generated with different subsampling. {\em Top} and {\em Bottom}, respectively, refer to the domain adaptation closest and furthest from the biology domain.} 
 \label{tbl_ppTableCoverage}
 \end{table}
 % source: ~tsz/vulcan/ppTableCoverageStats
